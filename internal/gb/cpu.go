@@ -1,5 +1,7 @@
 package gb
 
+import "fmt"
+
 type CPU struct {
 	mem Memory
 	reg Registers
@@ -21,6 +23,24 @@ func NewCPU(romPath string) (*CPU, error) {
 
 func (c *CPU) Run() {
 	c.reset()
+
+	for {
+		opCode := c.mem.Read(c.reg.PC)
+
+		var instr Instruction
+		if opCode == opCodeExt {
+			opCode = c.mem.Read(c.reg.PC + 1)
+			instr = extendedInstruction[opCode]
+		} else {
+			instr = instruction[opCode]
+		}
+
+		if instr == nil {
+			panic(fmt.Sprintf("Fetched unknown op code %x", opCode))
+		}
+
+		instr(&c.mem, &c.reg)
+	}
 }
 
 func (c *CPU) reset() {
@@ -35,3 +55,9 @@ func (c *CPU) reset() {
 	c.reg.SP = 0
 	c.reg.PC = 0
 }
+
+const opCodeExt uint8 = 0xCB
+
+var instruction = map[uint8]Instruction{}
+
+var extendedInstruction = map[uint8]Instruction{}
