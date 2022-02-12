@@ -26,10 +26,12 @@ func (c *CPU) Run() {
 
 	for {
 		opCode := c.mem.Read8(c.reg.PC)
+		c.reg.PC += 1
 
 		var instr Instruction
 		if opCode == opCodeExt {
 			opCode = c.mem.Read8(c.reg.PC + 1)
+			c.reg.PC += 1
 			instr = extendedInstruction[opCode]
 		} else {
 			instr = instruction[opCode]
