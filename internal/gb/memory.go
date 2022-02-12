@@ -11,9 +11,16 @@ type Memory struct {
 	rom [romSize]byte
 }
 
-func (m *Memory) Read(addr uint16) byte {
+func (m *Memory) Read8(addr uint16) uint8 {
 	// Only ROM for now
 	return m.rom[addr]
+}
+
+func (m *Memory) Read16(addr uint16) uint16 {
+	// Little endian
+	lowByte := uint16(m.Read8(addr))
+	highByte := uint16(m.Read8(addr + 1))
+	return (highByte << 8) | lowByte
 }
 
 func loadROM(romPath string) ([romSize]byte, error) {

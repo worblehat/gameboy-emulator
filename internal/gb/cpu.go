@@ -25,18 +25,18 @@ func (c *CPU) Run() {
 	c.reset()
 
 	for {
-		opCode := c.mem.Read(c.reg.PC)
+		opCode := c.mem.Read8(c.reg.PC)
 
 		var instr Instruction
 		if opCode == opCodeExt {
-			opCode = c.mem.Read(c.reg.PC + 1)
+			opCode = c.mem.Read8(c.reg.PC + 1)
 			instr = extendedInstruction[opCode]
 		} else {
 			instr = instruction[opCode]
 		}
 
 		if instr == nil {
-			panic(fmt.Sprintf("Fetched unknown op code %x", opCode))
+			panic(fmt.Sprintf("Fetched unknown op code %X", opCode))
 		}
 
 		instr(&c.mem, &c.reg)
