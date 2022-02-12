@@ -60,6 +60,8 @@ func (c *CPU) reset() {
 
 const opCodeExt uint8 = 0xCB
 
-var instruction = map[uint8]Instruction{}
+var instruction = map[uint8]Instruction{
+	0x31: LD_SP_nn,
+}
 
 var extendedInstruction = map[uint8]Instruction{}
