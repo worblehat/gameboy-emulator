@@ -33,3 +33,71 @@ func LD_SP_nn(mem *Memory, reg *Registers) {
 	reg.SP = mem.Read16(reg.PC)
 	reg.PC += 2
 }
+
+// ###### Logical Operations ######
+
+// XOR_A_A xors A with A and puts result into A.
+func XOR_A_A(mem *Memory, reg *Registers) {
+	//lint:ignore SA4000 does not make much sense but this is what the instruction does
+	reg.A = reg.A ^ reg.A
+	reg.SetFlags(subtractFlag|halfCarryFlag|carryFlag, false)
+	reg.SetFlags(zeroFlag, reg.A == 0)
+}
+
+// XOR_A_B xors A with B and puts result into A.
+func XOR_A_B(mem *Memory, reg *Registers) {
+	reg.A = reg.A ^ reg.B
+	reg.SetFlags(subtractFlag|halfCarryFlag|carryFlag, false)
+	reg.SetFlags(zeroFlag, reg.A == 0)
+}
+
+// XOR_A_C xors A with C and puts result into A.
+func XOR_A_C(mem *Memory, reg *Registers) {
+	reg.A = reg.A ^ reg.C
+	reg.SetFlags(subtractFlag|halfCarryFlag|carryFlag, false)
+	reg.SetFlags(zeroFlag, reg.A == 0)
+}
+
+// XOR_A_D xors A with D and puts result into A.
+func XOR_A_D(mem *Memory, reg *Registers) {
+	reg.A = reg.A ^ reg.D
+	reg.SetFlags(subtractFlag|halfCarryFlag|carryFlag, false)
+	reg.SetFlags(zeroFlag, reg.A == 0)
+}
+
+// XOR_A_E xors A with E and puts result into A.
+func XOR_A_E(mem *Memory, reg *Registers) {
+	reg.A = reg.A ^ reg.E
+	reg.SetFlags(subtractFlag|halfCarryFlag|carryFlag, false)
+	reg.SetFlags(zeroFlag, reg.A == 0)
+}
+
+// XOR_A_H xors A with H and puts result into A.
+func XOR_A_H(mem *Memory, reg *Registers) {
+	reg.A = reg.A ^ reg.H
+	reg.SetFlags(subtractFlag|halfCarryFlag|carryFlag, false)
+	reg.SetFlags(zeroFlag, reg.A == 0)
+}
+
+// XOR_A_L xors A with L and puts result into A.
+func XOR_A_L(mem *Memory, reg *Registers) {
+	reg.A = reg.A ^ reg.L
+	reg.SetFlags(subtractFlag|halfCarryFlag|carryFlag, false)
+	reg.SetFlags(zeroFlag, reg.A == 0)
+}
+
+// XOR_A_HL xors A with the value pointed to by HL and puts result into A.
+func XOR_A_HL(mem *Memory, reg *Registers) {
+	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	reg.A = reg.A ^ mem.Read8(addr)
+	reg.SetFlags(subtractFlag|halfCarryFlag|carryFlag, false)
+	reg.SetFlags(zeroFlag, reg.A == 0)
+}
+
+// XOR_A_n xors A with the value pointed to by PC and puts result into A.
+func XOR_A_n(mem *Memory, reg *Registers) {
+	reg.A = reg.A ^ mem.Read8(reg.PC)
+	reg.PC += 1
+	reg.SetFlags(subtractFlag|halfCarryFlag|carryFlag, false)
+	reg.SetFlags(zeroFlag, reg.A == 0)
+}

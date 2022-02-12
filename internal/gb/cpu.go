@@ -56,6 +56,15 @@ var instruction = map[uint8]Instruction{
 	0x11: LD_DE_nn,
 	0x21: LD_HL_nn,
 	0x31: LD_SP_nn,
+	0xAF: XOR_A_A,
+	0xA8: XOR_A_B,
+	0xA9: XOR_A_C,
+	0xAA: XOR_A_D,
+	0xAB: XOR_A_E,
+	0xAC: XOR_A_H,
+	0xAD: XOR_A_L,
+	0xAE: XOR_A_HL,
+	0xEE: XOR_A_n,
 }
 
 var extendedInstruction = map[uint8]Instruction{}
