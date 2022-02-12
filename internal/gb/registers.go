@@ -13,6 +13,18 @@ type Registers struct {
 	PC uint16
 }
 
+func (r *Registers) SetFlags(flags uint8) {
+	r.F |= flags
+}
+
+func (r *Registers) ClearFlags(flags uint8) {
+	r.F &= ^flags
+}
+
+func (r *Registers) IsFlagSet(flag uint8) bool {
+	return (r.F & flag) != 0
+}
+
 const zeroFlag uint8 = 1 << 7
 const subtractFlag uint8 = 1 << 6
 const halfCarryFlag uint8 = 1 << 5
