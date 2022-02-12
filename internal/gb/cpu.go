@@ -46,16 +46,7 @@ func (c *CPU) Run() {
 }
 
 func (c *CPU) reset() {
-	c.reg.A = 0
-	c.reg.B = 0
-	c.reg.C = 0
-	c.reg.D = 0
-	c.reg.E = 0
-	c.reg.F = 0
-	c.reg.L = 0
-	c.reg.H = 0
-	c.reg.SP = 0
-	c.reg.PC = 0
+	c.reg.Reset()
 }
 
 const opCodeExt uint8 = 0xCB

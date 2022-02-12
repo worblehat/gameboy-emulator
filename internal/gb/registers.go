@@ -25,6 +25,19 @@ func (r *Registers) IsFlagSet(flag uint8) bool {
 	return (r.F & flag) != 0
 }
 
+func (r *Registers) Reset() {
+	r.A = 0
+	r.B = 0
+	r.C = 0
+	r.D = 0
+	r.E = 0
+	r.F = 0
+	r.L = 0
+	r.H = 0
+	r.SP = 0
+	r.PC = 0
+}
+
 const zeroFlag uint8 = 1 << 7
 const subtractFlag uint8 = 1 << 6
 const halfCarryFlag uint8 = 1 << 5
