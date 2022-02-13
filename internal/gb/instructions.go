@@ -9,7 +9,7 @@ type Instruction func(*Memory, *Registers)
 
 // LDD_HL_A loads the value of A to address HL and decrements HL.
 func LDD_HL_A(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	addr := reg.HL()
 	mem.Write8(addr, reg.A)
 	addr -= 1
 	reg.H = uint8(addr >> 8)
@@ -379,49 +379,49 @@ func BIT_7_L(mem *Memory, reg *Registers) {
 
 // BIT_0_HL tests bit 0 of the value pointed by HL.
 func BIT_0_HL(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	addr := reg.HL()
 	testBit(mem.Read8(addr), 0, reg)
 }
 
 // BIT_1_HL tests bit 1 of the value pointed by HL.
 func BIT_1_HL(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	addr := reg.HL()
 	testBit(mem.Read8(addr), 1, reg)
 }
 
 // BIT_2_HL tests bit 2 of the value pointed by HL.
 func BIT_2_HL(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	addr := reg.HL()
 	testBit(mem.Read8(addr), 2, reg)
 }
 
 // BIT_3_HL tests bit 3 of the value pointed by HL.
 func BIT_3_HL(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	addr := reg.HL()
 	testBit(mem.Read8(addr), 3, reg)
 }
 
 // BIT_4_HL tests bit 4 of the value pointed by HL.
 func BIT_4_HL(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	addr := reg.HL()
 	testBit(mem.Read8(addr), 4, reg)
 }
 
 // BIT_5_HL tests bit 5 of the value pointed by HL.
 func BIT_5_HL(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	addr := reg.HL()
 	testBit(mem.Read8(addr), 5, reg)
 }
 
 // BIT_6_HL tests bit 6 of the value pointed by HL.
 func BIT_6_HL(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	addr := reg.HL()
 	testBit(mem.Read8(addr), 6, reg)
 }
 
 // BIT_7_HL tests bit 7 of the value pointed by HL.
 func BIT_7_HL(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	addr := reg.HL()
 	testBit(mem.Read8(addr), 7, reg)
 }
 
