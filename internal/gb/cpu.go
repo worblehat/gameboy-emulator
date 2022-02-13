@@ -30,7 +30,7 @@ func (c *CPU) Run() {
 
 		var instr Instruction
 		if opCode == opCodeExt {
-			opCode = c.mem.Read8(c.reg.PC + 1)
+			opCode = c.mem.Read8(c.reg.PC)
 			c.reg.PC += 1
 			instr = extendedInstruction[opCode]
 		} else {
