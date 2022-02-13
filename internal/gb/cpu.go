@@ -25,18 +25,16 @@ func (c *CPU) Run() {
 	c.reset()
 
 	for {
-		opCode := c.mem.Read8(c.reg.PC)
+		opCode := uint16(c.mem.Read8(c.reg.PC))
 		c.reg.PC += 1
 
 		var instr Instruction
 		if opCode == opCodeExt {
-			opCode = c.mem.Read8(c.reg.PC)
+			opCode = (opCode << 8) | uint16(c.mem.Read8(c.reg.PC))
 			c.reg.PC += 1
-			instr = extendedInstruction[opCode]
-		} else {
-			instr = instruction[opCode]
 		}
 
+		instr = instruction[opCode]
 		if instr == nil {
 			panic(fmt.Sprintf("Fetched unknown op code %X", opCode))
 		}
@@ -49,9 +47,9 @@ func (c *CPU) reset() {
 	c.reg.Reset()
 }
 
-const opCodeExt uint8 = 0xCB
+const opCodeExt uint16 = 0xCB
 
-var instruction = map[uint8]Instruction{
+var instruction = map[uint16]Instruction{
 	0x01: LD_BC_nn,
 	0x11: LD_DE_nn,
 	0x21: LD_HL_nn,
@@ -67,5 +65,3 @@ var instruction = map[uint8]Instruction{
 	0xAE: XOR_A_HL,
 	0xEE: XOR_A_n,
 }
-
-var extendedInstruction = map[uint8]Instruction{}
