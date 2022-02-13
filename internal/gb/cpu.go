@@ -56,6 +56,7 @@ var instruction = map[uint8]Instruction{
 	0x11: LD_DE_nn,
 	0x21: LD_HL_nn,
 	0x31: LD_SP_nn,
+	0x32: LDD_HL_A,
 	0xAF: XOR_A_A,
 	0xA8: XOR_A_B,
 	0xA9: XOR_A_C,

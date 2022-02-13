@@ -5,30 +5,41 @@ package gb
 // to by PC and increments PC afterwards.
 type Instruction func(*Memory, *Registers)
 
+// ###### 8-Bit Loads ######
+
+// LDD_HL_A loads the value of A to address HL and decrements HL.
+func LDD_HL_A(mem *Memory, reg *Registers) {
+	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	mem.Write8(addr, reg.A)
+	addr -= 1
+	reg.H = uint8(addr >> 8)
+	reg.L = uint8(addr)
+}
+
 // ###### 16-Bit Loads ######
 
-// LD_BC_nn loads a 16 bit value into BC.
+// LD_BC_nn loads the 16 bit value at PC into BC.
 func LD_BC_nn(mem *Memory, reg *Registers) {
 	reg.C = mem.Read8(reg.PC)
 	reg.B = mem.Read8(reg.PC + 1)
 	reg.PC += 2
 }
 
-// LD_DE_nn loads a 16 bit value into DE.
+// LD_DE_nn loads the 16 bit value at PC into DE.
 func LD_DE_nn(mem *Memory, reg *Registers) {
 	reg.E = mem.Read8(reg.PC)
 	reg.D = mem.Read8(reg.PC + 1)
 	reg.PC += 2
 }
 
-// LD_HL_nn loads a 16 bit value into HL.
+// LD_HL_nn loads the 16 bit value at PC into HL.
 func LD_HL_nn(mem *Memory, reg *Registers) {
 	reg.L = mem.Read8(reg.PC)
 	reg.H = mem.Read8(reg.PC + 1)
 	reg.PC += 2
 }
 
-// LD_SP_nn loads a 16 bit value into SP.
+// LD_SP_nn loads the 16 bit value at PC into SP.
 func LD_SP_nn(mem *Memory, reg *Registers) {
 	reg.SP = mem.Read16(reg.PC)
 	reg.PC += 2
