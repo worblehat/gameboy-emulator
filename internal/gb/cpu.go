@@ -52,9 +52,13 @@ const opCodeExt uint16 = 0xCB
 var instruction = map[uint16]Instruction{
 	0x01:   LD_BC_nn,
 	0x11:   LD_DE_nn,
+	0x20:   JR_NZ_n,
 	0x21:   LD_HL_nn,
+	0x28:   JR_Z_n,
+	0x30:   JR_NC_n,
 	0x31:   LD_SP_nn,
 	0x32:   LDD_HL_A,
+	0x38:   JR_C_n,
 	0xAF:   XOR_A_A,
 	0xA8:   XOR_A_B,
 	0xA9:   XOR_A_C,

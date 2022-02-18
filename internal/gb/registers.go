@@ -42,7 +42,7 @@ func (r *Registers) Reset() {
 	r.PC = 0
 }
 
-const zeroFlag uint8 = 1 << 7
-const subtractFlag uint8 = 1 << 6
-const halfCarryFlag uint8 = 1 << 5
-const carryFlag uint8 = 1 << 4
+const zeroFlag uint8 = 1 << 7      // Z
+const subtractFlag uint8 = 1 << 6  // N
+const halfCarryFlag uint8 = 1 << 5 // H
+const carryFlag uint8 = 1 << 4     // C

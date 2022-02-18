@@ -1,5 +1,10 @@
 package gb
 
+import (
+	"fmt"
+	"math"
+)
+
 // Instruction is a single CPU instruction that cane access registers and memory.
 // If an instruction needs an operand it reads it from the memory address pointed
 // to by PC and increments PC afterwards.
@@ -425,6 +430,40 @@ func BIT_7_HL(mem *Memory, reg *Registers) {
 	testBit(mem.Read8(addr), 7, reg)
 }
 
+// ###### Relative Jumps ######
+
+// If the zero flag is not set JR_NZ_n adds an 8 bit signed immediate
+// value to current PC and jumps to it.
+func JR_NZ_n(mem *Memory, reg *Registers) {
+	if !reg.IsFlagSet(zeroFlag) {
+		relJumpByImmediateValue(mem, reg)
+	}
+}
+
+// If the zero flag is set JR_Z_n adds an 8 bit signed immediate
+// value to current PC and jumps to it.
+func JR_Z_n(mem *Memory, reg *Registers) {
+	if reg.IsFlagSet(zeroFlag) {
+		relJumpByImmediateValue(mem, reg)
+	}
+}
+
+// If the carry flag is not set JR_NC_n adds an 8 bit signed immediate
+// value to current PC and jumps to it.
+func JR_NC_n(mem *Memory, reg *Registers) {
+	if !reg.IsFlagSet(carryFlag) {
+		relJumpByImmediateValue(mem, reg)
+	}
+}
+
+// If the carry flag is set JR_C_n adds an 8 bit signed immediate
+// value to current PC and jumps to it.
+func JR_C_n(mem *Memory, reg *Registers) {
+	if reg.IsFlagSet(carryFlag) {
+		relJumpByImmediateValue(mem, reg)
+	}
+}
+
 // ###### Common functions used by the instructions ######
 
 // xorA xors register A with the given value and puts the result into A.
@@ -440,4 +479,23 @@ func testBit(value uint8, bit uint8, reg *Registers) {
 	reg.SetFlags(zeroFlag, !isSet)
 	reg.SetFlags(halfCarryFlag, true)
 	reg.SetFlags(subtractFlag, false)
+}
+
+// relJump performs a relative jump by adding an 8 bit signed immediate value
+// to the current PC.
+func relJumpByImmediateValue(mem *Memory, reg *Registers) {
+	n := int8(mem.Read8(reg.PC))
+	reg.PC += 1
+	relJump(n, reg)
+}
+
+// relJump performs a relative jump by adding n to the curren PC.
+func relJump(n int8, reg *Registers) {
+	newpc := int32(reg.PC) + int32(n)
+	if newpc < 0 || math.MaxUint16 < newpc {
+		panic(fmt.Sprintf(
+			"invalid relative jump (current PC: %x, jump: %v)",
+			reg.PC, n))
+	}
+	reg.PC += uint16(newpc)
 }
