@@ -126,6 +126,51 @@ func XOR_A_n(mem *Memory, reg *Registers) {
 	xorA(n, reg)
 }
 
+// ###### 8-Bit Arithmetic Operations ######
+
+// INC_A increments register A.
+func INC_A(mem *Memory, reg *Registers) {
+	increment(&reg.A, reg)
+}
+
+// INC_B increments register B.
+func INC_B(mem *Memory, reg *Registers) {
+	increment(&reg.B, reg)
+}
+
+// INC_C increments register C.
+func INC_C(mem *Memory, reg *Registers) {
+	increment(&reg.C, reg)
+}
+
+// INC_D increments register D.
+func INC_D(mem *Memory, reg *Registers) {
+	increment(&reg.D, reg)
+}
+
+// INC_E increments register E.
+func INC_E(mem *Memory, reg *Registers) {
+	increment(&reg.E, reg)
+}
+
+// INC_H increments register H.
+func INC_H(mem *Memory, reg *Registers) {
+	increment(&reg.H, reg)
+}
+
+// INC_L increments register L.
+func INC_L(mem *Memory, reg *Registers) {
+	increment(&reg.L, reg)
+}
+
+// INC_HL increments the value pointed to by HL.
+func INC_HL(mem *Memory, reg *Registers) {
+	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	value := mem.Read8(addr)
+	increment(&value, reg)
+	mem.Write8(addr, value)
+}
+
 // ###### Single-Bit Operations ######
 
 // BIT_0_A tests bit 0 in register A.
@@ -492,19 +537,27 @@ func JR_C_n(mem *Memory, reg *Registers) {
 
 // ###### Common functions used by the instructions ######
 
-// xorA xors register A with the given value and puts the result into A.
+// xorA xors register A with the given reigster or memory value and puts the result into A.
 func xorA(value uint8, reg *Registers) {
 	reg.A = reg.A ^ value
 	reg.SetFlags(subtractFlag|halfCarryFlag|carryFlag, false)
 	reg.SetFlags(zeroFlag, reg.A == 0)
 }
 
-// testBit checks if the given bit is set in the given value.
+// testBit checks if the given bit is set in the given register or memory value.
 func testBit(value uint8, bit uint8, reg *Registers) {
 	isSet := (value & (1 << bit)) != 0
 	reg.SetFlags(zeroFlag, !isSet)
 	reg.SetFlags(halfCarryFlag, true)
 	reg.SetFlags(subtractFlag, false)
+}
+
+// increment increments the given register or memory value.
+func increment(value *uint8, reg *Registers) {
+	*value += 1
+	reg.SetFlags(halfCarryFlag, (*value&0x0F) == 0)
+	reg.SetFlags(subtractFlag, false)
+	reg.SetFlags(zeroFlag, *value == 0)
 }
 
 // relJump performs a relative jump by adding an 8 bit signed immediate value
