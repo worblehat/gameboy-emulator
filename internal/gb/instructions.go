@@ -21,6 +21,32 @@ func LDD_HL_A(mem *Memory, reg *Registers) {
 	reg.L = uint8(addr)
 }
 
+// LDD_IO_C_A loads the value of A to address 0xFF00 + C (I/O memory).
+func LDD_IO_C_A(mem *Memory, reg *Registers) {
+	addr := 0xff00 + uint16(reg.C)
+	mem.Write8(addr, reg.A)
+}
+
+// LDD_A_IO_C loads the value at 0xFF00 + C (I/O memory) into A.
+func LDD_A_IO_C(mem *Memory, reg *Registers) {
+	addr := 0xff00 + uint16(reg.C)
+	reg.A = mem.Read8(addr)
+}
+
+// LDD_IO_n_A loads the value of A to address 0xFF00 + immediate value (I/O memory).
+func LDD_IO_n_A(mem *Memory, reg *Registers) {
+	addr := 0xff00 + uint16(mem.Read8(reg.PC))
+	reg.PC += 1
+	mem.Write8(addr, reg.A)
+}
+
+// LDD_A_IO_n loads the value at 0xFF00 + immediate value (I/O memory) into A.
+func LDD_A_IO_n(mem *Memory, reg *Registers) {
+	addr := 0xff00 + uint16(mem.Read8(reg.PC))
+	reg.PC += 1
+	reg.A = mem.Read8(addr)
+}
+
 // ###### 16-Bit Loads ######
 
 // LD_BC_nn loads a 16 bit immediate value into BC.

@@ -7,15 +7,15 @@ type CPU struct {
 	reg Registers
 }
 
-func NewCPU(romPath string) (*CPU, error) {
+func NewCPU(bootROMPath string) (*CPU, error) {
 
-	rom, err := loadROM(romPath)
+	bootROM, err := loadBootROM(bootROMPath)
 	if err != nil {
 		return nil, err
 	}
 
 	cpu := &CPU{
-		mem: Memory{rom: rom},
+		mem: Memory{bootROM: bootROM},
 		reg: Registers{},
 	}
 	return cpu, nil
@@ -53,6 +53,7 @@ const opCodeExt uint16 = 0xCB
 var instruction = map[uint16]Instruction{
 	0x01:   LD_BC_nn,
 	0x11:   LD_DE_nn,
+	0x12:   LDD_A_IO_n,
 	0x20:   JR_NZ_n,
 	0x21:   LD_HL_nn,
 	0x28:   JR_Z_n,
@@ -68,7 +69,10 @@ var instruction = map[uint16]Instruction{
 	0xAC:   XOR_A_H,
 	0xAD:   XOR_A_L,
 	0xAE:   XOR_A_HL,
+	0xE0:   LDD_IO_n_A,
+	0xE2:   LDD_IO_C_A,
 	0xEE:   XOR_A_n,
+	0xF2:   LDD_A_IO_C,
 	0xCB40: BIT_0_B,
 	0xCB41: BIT_0_C,
 	0xCB42: BIT_0_D,
