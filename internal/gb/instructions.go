@@ -12,8 +12,8 @@ type Instruction func(*Memory, *Registers)
 
 // ###### 8-Bit Loads ######
 
-// LDD_HL_A loads the value of A to address HL and decrements HL.
-func LDD_HL_A(mem *Memory, reg *Registers) {
+// LDD_pHL_A loads the value of A to address HL and decrements HL.
+func LDD_pHL_A(mem *Memory, reg *Registers) {
 	addr := reg.HL()
 	mem.Write8(addr, reg.A)
 	addr -= 1
@@ -113,8 +113,8 @@ func XOR_A_L(mem *Memory, reg *Registers) {
 	xorA(reg.L, reg)
 }
 
-// XOR_A_HL xors A with the value pointed by HL and puts result into A.
-func XOR_A_HL(mem *Memory, reg *Registers) {
+// XOR_A_pHL xors A with the value pointed by HL and puts result into A.
+func XOR_A_pHL(mem *Memory, reg *Registers) {
 	addr := (uint16(reg.H) << 8) | uint16(reg.L)
 	xorA(mem.Read8(addr), reg)
 }
@@ -163,8 +163,8 @@ func INC_L(mem *Memory, reg *Registers) {
 	increment(&reg.L, reg)
 }
 
-// INC_HL increments the value pointed to by HL.
-func INC_HL(mem *Memory, reg *Registers) {
+// INC_pHL increments the value pointed to by HL.
+func INC_pHL(mem *Memory, reg *Registers) {
 	addr := (uint16(reg.H) << 8) | uint16(reg.L)
 	value := mem.Read8(addr)
 	increment(&value, reg)
@@ -453,50 +453,50 @@ func BIT_7_L(mem *Memory, reg *Registers) {
 	testBit(reg.L, 7, reg)
 }
 
-// BIT_0_HL tests bit 0 of the value pointed by HL.
-func BIT_0_HL(mem *Memory, reg *Registers) {
+// BIT_0_pHL tests bit 0 of the value pointed by HL.
+func BIT_0_pHL(mem *Memory, reg *Registers) {
 	addr := reg.HL()
 	testBit(mem.Read8(addr), 0, reg)
 }
 
-// BIT_1_HL tests bit 1 of the value pointed by HL.
-func BIT_1_HL(mem *Memory, reg *Registers) {
+// BIT_1_pHL tests bit 1 of the value pointed by HL.
+func BIT_1_pHL(mem *Memory, reg *Registers) {
 	addr := reg.HL()
 	testBit(mem.Read8(addr), 1, reg)
 }
 
-// BIT_2_HL tests bit 2 of the value pointed by HL.
-func BIT_2_HL(mem *Memory, reg *Registers) {
+// BIT_2_pHL tests bit 2 of the value pointed by HL.
+func BIT_2_pHL(mem *Memory, reg *Registers) {
 	addr := reg.HL()
 	testBit(mem.Read8(addr), 2, reg)
 }
 
-// BIT_3_HL tests bit 3 of the value pointed by HL.
-func BIT_3_HL(mem *Memory, reg *Registers) {
+// BIT_3_pHL tests bit 3 of the value pointed by HL.
+func BIT_3_pHL(mem *Memory, reg *Registers) {
 	addr := reg.HL()
 	testBit(mem.Read8(addr), 3, reg)
 }
 
-// BIT_4_HL tests bit 4 of the value pointed by HL.
-func BIT_4_HL(mem *Memory, reg *Registers) {
+// BIT_4_pHL tests bit 4 of the value pointed by HL.
+func BIT_4_pHL(mem *Memory, reg *Registers) {
 	addr := reg.HL()
 	testBit(mem.Read8(addr), 4, reg)
 }
 
-// BIT_5_HL tests bit 5 of the value pointed by HL.
-func BIT_5_HL(mem *Memory, reg *Registers) {
+// BIT_5_pHL tests bit 5 of the value pointed by HL.
+func BIT_5_pHL(mem *Memory, reg *Registers) {
 	addr := reg.HL()
 	testBit(mem.Read8(addr), 5, reg)
 }
 
-// BIT_6_HL tests bit 6 of the value pointed by HL.
-func BIT_6_HL(mem *Memory, reg *Registers) {
+// BIT_6_pHL tests bit 6 of the value pointed by HL.
+func BIT_6_pHL(mem *Memory, reg *Registers) {
 	addr := reg.HL()
 	testBit(mem.Read8(addr), 6, reg)
 }
 
-// BIT_7_HL tests bit 7 of the value pointed by HL.
-func BIT_7_HL(mem *Memory, reg *Registers) {
+// BIT_7_pHL tests bit 7 of the value pointed by HL.
+func BIT_7_pHL(mem *Memory, reg *Registers) {
 	addr := reg.HL()
 	testBit(mem.Read8(addr), 7, reg)
 }
