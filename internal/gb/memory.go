@@ -19,7 +19,7 @@ func (m *Memory) Read8(addr uint16) uint8 {
 	} else if addr >= 0x8000 && addr < 0xA000 {
 		return m.vram[addr-0x8000]
 	}
-	panic(fmt.Sprintf("Read from unknown memory address %X", addr))
+	panic(fmt.Sprintf("Read from unknown memory address 0x%X", addr))
 }
 
 func (m *Memory) Read16(addr uint16) uint16 {
@@ -33,7 +33,7 @@ func (m *Memory) Write8(addr uint16, val uint8) {
 	if addr >= 0x8000 && addr < 0xA000 {
 		m.vram[addr-0x8000] = val
 	} else {
-		panic(fmt.Sprintf("Write to unknown memory address %X", addr))
+		panic(fmt.Sprintf("Write to unknown memory address 0x%X", addr))
 	}
 }
 

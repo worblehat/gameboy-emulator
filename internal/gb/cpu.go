@@ -26,6 +26,7 @@ func (c *CPU) Run() {
 
 	for {
 		opCode := uint16(c.mem.Read8(c.reg.PC))
+		instrAddr := c.reg.PC
 		c.reg.PC += 1
 
 		var instr Instruction
@@ -36,7 +37,7 @@ func (c *CPU) Run() {
 
 		instr = instruction[opCode]
 		if instr == nil {
-			panic(fmt.Sprintf("Fetched unknown op code %X", opCode))
+			panic(fmt.Sprintf("Fetched unknown op code 0x%X from 0x%x", opCode, instrAddr))
 		}
 
 		instr(&c.mem, &c.reg)

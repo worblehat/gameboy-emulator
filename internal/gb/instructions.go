@@ -494,7 +494,7 @@ func relJump(n int8, reg *Registers) {
 	newpc := int32(reg.PC) + int32(n)
 	if newpc < 0 || math.MaxUint16 < newpc {
 		panic(fmt.Sprintf(
-			"invalid relative jump (current PC: %x, jump: %v)",
+			"invalid relative jump (current PC: 0x%x, jump: %v)",
 			reg.PC, n))
 	}
 	reg.PC += uint16(newpc)
