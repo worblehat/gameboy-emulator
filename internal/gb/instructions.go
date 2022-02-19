@@ -78,6 +78,61 @@ func LD_A_n(mem *Memory, reg *Registers) {
 	reg.PC += 1
 }
 
+// LD_B_A loads the value of A into B.
+func LD_B_A(mem *Memory, reg *Registers) {
+	reg.B = reg.A
+}
+
+// LD_C_A loads the value of A into C.
+func LD_C_A(mem *Memory, reg *Registers) {
+	reg.C = reg.A
+}
+
+// LD_D_A loads the value of A into D.
+func LD_D_A(mem *Memory, reg *Registers) {
+	reg.D = reg.A
+}
+
+// LD_E_A loads the value of A into E.
+func LD_E_A(mem *Memory, reg *Registers) {
+	reg.E = reg.A
+}
+
+// LD_H_A loads the value of A into H.
+func LD_H_A(mem *Memory, reg *Registers) {
+	reg.H = reg.A
+}
+
+// LD_L_A loads the value of A into L.
+func LD_L_A(mem *Memory, reg *Registers) {
+	reg.L = reg.A
+}
+
+// LD_pBC_ loads the value of A into the address pointed by BC.
+func LD_pBC_A(mem *Memory, reg *Registers) {
+	addr := (uint16(reg.B) << 8) | uint16(reg.C)
+	mem.Write8(addr, reg.A)
+}
+
+// LD_pDE_ loads the value of A into the address pointed by DE.
+func LD_pDE_A(mem *Memory, reg *Registers) {
+	addr := (uint16(reg.D) << 8) | uint16(reg.E)
+	mem.Write8(addr, reg.A)
+}
+
+// LD_pHL_ loads the value of A into the address pointed by HL.
+func LD_pHL_A(mem *Memory, reg *Registers) {
+	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	mem.Write8(addr, reg.A)
+}
+
+// LD_pnn_A loads the value of A into the address pointed by the 16-bit immedite value.
+func LD_pnn_A(mem *Memory, reg *Registers) {
+	addr := mem.Read16(reg.PC)
+	reg.PC += 2
+	mem.Write8(addr, reg.A)
+}
+
 // LDD_pHL_A loads the value of A to address HL and decrements HL.
 func LDD_pHL_A(mem *Memory, reg *Registers) {
 	addr := reg.HL()

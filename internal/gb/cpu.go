@@ -37,7 +37,9 @@ func (c *CPU) Run() {
 
 		instr = instruction[opCode]
 		if instr == nil {
-			panic(fmt.Sprintf("Fetched unknown op code 0x%X from 0x%x", opCode, instrAddr))
+			panic(fmt.Sprintf(
+				"Fetched unknown op code 0x%X from address 0x%x",
+				opCode, instrAddr))
 		}
 
 		instr(&c.mem, &c.reg)
@@ -52,10 +54,12 @@ const opCodeExt uint16 = 0xCB
 
 var instruction = map[uint16]Instruction{
 	0x01:   LD_BC_nn,
+	0x02:   LD_pBC_A,
 	0x04:   INC_B,
 	0x0C:   INC_C,
 	0x0A:   LD_A_pBC,
 	0x11:   LD_DE_nn,
+	0x12:   LD_pDE_A,
 	0x14:   INC_D,
 	0x1A:   LD_A_pDE,
 	0x1C:   INC_E,
@@ -71,6 +75,13 @@ var instruction = map[uint16]Instruction{
 	0x38:   JR_C_n,
 	0x3C:   INC_A,
 	0x3E:   LD_A_n,
+	0x47:   LD_B_A,
+	0x4F:   LD_C_A,
+	0x57:   LD_D_A,
+	0x5F:   LD_E_A,
+	0x67:   LD_H_A,
+	0x6F:   LD_L_A,
+	0x77:   LD_pHL_A,
 	0x78:   LD_A_B,
 	0x79:   LD_A_C,
 	0x7A:   LD_A_D,
@@ -87,6 +98,7 @@ var instruction = map[uint16]Instruction{
 	0xAC:   XOR_A_H,
 	0xAD:   XOR_A_L,
 	0xAE:   XOR_A_pHL,
+	0xEA:   LD_pnn_A,
 	0xE0:   LDD_IO_n_A,
 	0xE2:   LDD_IO_C_A,
 	0xEE:   XOR_A_n,
