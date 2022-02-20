@@ -703,6 +703,49 @@ func JR_C_n(mem *Memory, reg *Registers) {
 	}
 }
 
+// ###### Calls ######
+
+// CALL_nn calls the address pointed by the immediate value.
+func CALL_nn(mem *Memory, reg *Registers) {
+	callImmediateValue(mem, reg)
+}
+
+// CALL_NZ_nn calls the address pointed by the immediate value if zero flag is not set.
+func CALL_NZ_nn(mem *Memory, reg *Registers) {
+	if !reg.IsFlagSet(zeroFlag) {
+		callImmediateValue(mem, reg)
+	} else {
+		reg.PC += 2
+	}
+}
+
+// CALL_Z_nn calls the address pointed by the immediate value if zero flag is set.
+func CALL_Z_nn(mem *Memory, reg *Registers) {
+	if reg.IsFlagSet(zeroFlag) {
+		callImmediateValue(mem, reg)
+	} else {
+		reg.PC += 2
+	}
+}
+
+// CALL_NC_nn calls the address pointed by the immediate value if carry flag is not set.
+func CALL_NC_nn(mem *Memory, reg *Registers) {
+	if !reg.IsFlagSet(carryFlag) {
+		callImmediateValue(mem, reg)
+	} else {
+		reg.PC += 2
+	}
+}
+
+// CALL_C_nn calls the address pointed by the immediate value if carry flag is set.
+func CALL_C_nn(mem *Memory, reg *Registers) {
+	if reg.IsFlagSet(carryFlag) {
+		callImmediateValue(mem, reg)
+	} else {
+		reg.PC += 2
+	}
+}
+
 // ###### Common functions used by the instructions ######
 
 // xorA xors register A with the given reigster or memory value and puts the result into A.
@@ -745,4 +788,18 @@ func relJump(n int8, reg *Registers) {
 			reg.PC, n))
 	}
 	reg.PC = uint16(newPC)
+}
+
+// callImmediateValue calls the address pointed by a 16-bit immediate value by
+// pushing the address of the next instruction onto the stack and
+// jumping to the address pointed by the 16-bit imemdiate value.
+func callImmediateValue(mem *Memory, reg *Registers) {
+	pushOntoStack(reg.PC+2, mem, reg)
+	reg.PC = mem.Read16(reg.PC)
+}
+
+// pushOntoStack pushes a 16-bit value onto the stack.
+func pushOntoStack(value uint16, mem *Memory, reg *Registers) {
+	reg.SP -= 2
+	mem.Write16(reg.SP, value)
 }
