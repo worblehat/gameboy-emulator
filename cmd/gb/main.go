@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -9,19 +10,74 @@ import (
 )
 
 func main() {
-	romPath := flag.String("rom", "", "Path to a file with ROM content")
+	bootROMPath := flag.String("boot-rom", "", "Path to a file with the boot ROM.")
+	cartROMPath := flag.String("cartridge-rom", "", "Path to a file with a cartridge ROM.")
 	flag.Parse()
 
-	if *romPath == "" {
-		fmt.Println("Error: No rom file provided on command line")
+	if *bootROMPath == "" {
+		fmt.Println("Error: No boot ROM file provided on command line")
+		flag.PrintDefaults()
+		os.Exit(1)
+	}
+	if *cartROMPath == "" {
+		fmt.Println("Error: No cartridge ROM file provided on command line")
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
 
-	cpu, err := gb.NewCPU(*romPath)
+	bootROM, err := loadBootROM(*bootROMPath)
 	if err != nil {
-		fmt.Printf("Error: Could not initialize CPU (%v)\n", err)
+		fmt.Printf("Error: Could not load boot ROM from file %v (%v)\n", *bootROMPath, err)
 		os.Exit(2)
 	}
+
+	cartROM0, err := loadCartROM0(*cartROMPath)
+	if err != nil {
+		fmt.Printf("Error: Could not load cartridge ROM from file %v (%v)\n", *cartROMPath, err)
+		os.Exit(3)
+	}
+
+	memory := gb.NewMemory(bootROM, cartROM0)
+
+	cpu := gb.NewCPU(memory)
 	cpu.Run()
+}
+
+func loadBootROM(romPath string) ([gb.BootROMSize]byte, error) {
+	var rom [gb.BootROMSize]byte
+
+	content, err := os.ReadFile(romPath)
+	if err != nil {
+		return rom, err
+	}
+
+	if len(content) > len(rom) {
+		return rom, fmt.Errorf(
+			"provided ROM file of size %vB is too large for boot ROM", len(content))
+	}
+
+	copy(rom[:], content[:gb.BootROMSize])
+
+	return rom, nil
+}
+
+func loadCartROM0(romPath string) ([gb.CartROM0Size]byte, error) {
+	var rom [gb.CartROM0Size]byte
+
+	file, err := os.Open(romPath)
+	if err != nil {
+		return rom, err
+	}
+	defer file.Close()
+
+	n, err := file.Read(rom[:])
+
+	if err != nil {
+		return rom, err
+	}
+	if n != len(rom) {
+		return rom, errors.New("provided cartridge ROM file is to small")
+	}
+
+	return rom, nil
 }

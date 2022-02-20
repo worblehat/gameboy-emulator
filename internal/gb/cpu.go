@@ -3,22 +3,15 @@ package gb
 import "fmt"
 
 type CPU struct {
-	mem Memory
+	mem *Memory
 	reg Registers
 }
 
-func NewCPU(bootROMPath string) (*CPU, error) {
-
-	bootROM, err := loadBootROM(bootROMPath)
-	if err != nil {
-		return nil, err
-	}
-
-	cpu := &CPU{
-		mem: Memory{bootROM: bootROM},
+func NewCPU(mem *Memory) *CPU {
+	return &CPU{
+		mem: mem,
 		reg: Registers{},
 	}
-	return cpu, nil
 }
 
 func (c *CPU) Run() {
@@ -42,7 +35,7 @@ func (c *CPU) Run() {
 				opCode, instrAddr))
 		}
 
-		instr(&c.mem, &c.reg)
+		instr(c.mem, &c.reg)
 	}
 }
 
