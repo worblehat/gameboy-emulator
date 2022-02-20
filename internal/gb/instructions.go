@@ -702,11 +702,11 @@ func relJumpByImmediateValue(mem *Memory, reg *Registers) {
 
 // relJump performs a relative jump by adding n to the curren PC.
 func relJump(n int8, reg *Registers) {
-	newpc := int32(reg.PC) + int32(n)
-	if newpc < 0 || math.MaxUint16 < newpc {
+	newPC := int32(reg.PC) + int32(n)
+	if newPC < 0 || math.MaxUint16 < newPC {
 		panic(fmt.Sprintf(
 			"invalid relative jump (current PC: 0x%x, jump: %v)",
 			reg.PC, n))
 	}
-	reg.PC = uint16(newpc)
+	reg.PC = uint16(newPC)
 }
