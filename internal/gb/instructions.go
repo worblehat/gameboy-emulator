@@ -15,6 +15,42 @@ type Instruction struct {
 
 // ###### 8-Bit Loads ######
 
+// LD_B_n loads an 8-bit immediate value into B.
+func LD_B_n(mem *Memory, reg *Registers) {
+	reg.B = mem.Read8(reg.PC)
+	reg.PC += 1
+}
+
+// LD_C_n loads an 8-bit immediate value into C.
+func LD_C_n(mem *Memory, reg *Registers) {
+	reg.C = mem.Read8(reg.PC)
+	reg.PC += 1
+}
+
+// LD_D_n loads an 8-bit immediate value into D.
+func LD_D_n(mem *Memory, reg *Registers) {
+	reg.D = mem.Read8(reg.PC)
+	reg.PC += 1
+}
+
+// LD_E_n loads an 8-bit immediate value into E.
+func LD_E_n(mem *Memory, reg *Registers) {
+	reg.E = mem.Read8(reg.PC)
+	reg.PC += 1
+}
+
+// LD_H_n loads an 8-bit immediate value into H.
+func LD_H_n(mem *Memory, reg *Registers) {
+	reg.H = mem.Read8(reg.PC)
+	reg.PC += 1
+}
+
+// LD_L_n loads an 8-bit immediate value into L.
+func LD_L_n(mem *Memory, reg *Registers) {
+	reg.L = mem.Read8(reg.PC)
+	reg.PC += 1
+}
+
 // LD_A_A loads the value of A into A.
 func LD_A_A(mem *Memory, reg *Registers) {
 	//reg.A = reg.A
