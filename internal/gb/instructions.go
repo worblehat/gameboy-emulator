@@ -5,10 +5,13 @@ import (
 	"math"
 )
 
-// Instruction is a single CPU instruction that cane access registers and memory.
-// If an instruction needs an operand it reads it from the memory address pointed
-// to by PC and increments PC afterwards.
-type Instruction func(*Memory, *Registers)
+type Instruction struct {
+	Name string
+	// Exec executes a CPU instruction that can access registers and memory.
+	// If an instruction needs an operand it reads it from the memory address pointed
+	// to by PC and increments PC afterwards.
+	Exec func(mem *Memory, reg *Registers)
+}
 
 // ###### 8-Bit Loads ######
 
@@ -142,27 +145,27 @@ func LDD_pHL_A(mem *Memory, reg *Registers) {
 	reg.L = uint8(addr)
 }
 
-// LDD_IO_C_A loads the value of A to address 0xFF00 + C (I/O memory).
-func LDD_IO_C_A(mem *Memory, reg *Registers) {
+// LD_IO_C_A loads the value of A to address 0xFF00 + C (I/O memory).
+func LD_IO_C_A(mem *Memory, reg *Registers) {
 	addr := 0xff00 + uint16(reg.C)
 	mem.Write8(addr, reg.A)
 }
 
-// LDD_A_IO_C loads the value at 0xFF00 + C (I/O memory) into A.
-func LDD_A_IO_C(mem *Memory, reg *Registers) {
+// LD_A_IO_C loads the value at 0xFF00 + C (I/O memory) into A.
+func LD_A_IO_C(mem *Memory, reg *Registers) {
 	addr := 0xff00 + uint16(reg.C)
 	reg.A = mem.Read8(addr)
 }
 
-// LDD_IO_n_A loads the value of A to address 0xFF00 + immediate value (I/O memory).
-func LDD_IO_n_A(mem *Memory, reg *Registers) {
+// LD_IO_n_A loads the value of A to address 0xFF00 + immediate value (I/O memory).
+func LD_IO_n_A(mem *Memory, reg *Registers) {
 	addr := 0xff00 + uint16(mem.Read8(reg.PC))
 	reg.PC += 1
 	mem.Write8(addr, reg.A)
 }
 
-// LDD_A_IO_n loads the value at 0xFF00 + immediate value (I/O memory) into A.
-func LDD_A_IO_n(mem *Memory, reg *Registers) {
+// LD_A_IO_n loads the value at 0xFF00 + immediate value (I/O memory) into A.
+func LD_A_IO_n(mem *Memory, reg *Registers) {
 	addr := 0xff00 + uint16(mem.Read8(reg.PC))
 	reg.PC += 1
 	reg.A = mem.Read8(addr)

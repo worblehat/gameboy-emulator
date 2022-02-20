@@ -31,6 +31,7 @@ func (m *Memory) Read8(addr uint16) uint8 {
 	} else if addr >= 0x8000 && addr < 0xA000 {
 		return m.vram[addr-0x8000]
 	} else if addr >= 0xFF00 && addr < 0xFF80 {
+		fmt.Printf("Reading from I/O Memory at 0x%04X.\n", addr)
 		return m.ioMem[addr-0xFF00]
 	}
 	panic(fmt.Sprintf("Read from unknown memory address 0x%X", addr))
@@ -47,6 +48,7 @@ func (m *Memory) Write8(addr uint16, val uint8) {
 	if addr >= 0x8000 && addr < 0xA000 {
 		m.vram[addr-0x8000] = val
 	} else if addr >= 0xFF00 && addr < 0xFF80 {
+		fmt.Printf("Writing to I/O Memory at 0x%X.\n", addr)
 		m.ioMem[addr-0xFF00] = val
 	} else {
 		panic(fmt.Sprintf("Write to non-writable memory address 0x%X", addr))
