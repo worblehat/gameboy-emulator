@@ -236,6 +236,30 @@ func LD_SP_nn(mem *Memory, reg *Registers) {
 	reg.PC += 2
 }
 
+// PUSH_AF pushes AF onto the stack.
+func PUSH_AF(mem *Memory, reg *Registers) {
+	value := (uint16(reg.A) << 8) | uint16(reg.F)
+	pushOntoStack(value, mem, reg)
+}
+
+// PUSH_BC pushes BC onto the stack.
+func PUSH_BC(mem *Memory, reg *Registers) {
+	value := (uint16(reg.B) << 8) | uint16(reg.C)
+	pushOntoStack(value, mem, reg)
+}
+
+// PUSH_DE pushes DE onto the stack.
+func PUSH_DE(mem *Memory, reg *Registers) {
+	value := (uint16(reg.D) << 8) | uint16(reg.E)
+	pushOntoStack(value, mem, reg)
+}
+
+// PUSH_HL pushes HL onto the stack.
+func PUSH_HL(mem *Memory, reg *Registers) {
+	value := (uint16(reg.H) << 8) | uint16(reg.L)
+	pushOntoStack(value, mem, reg)
+}
+
 // ###### Logical Operations ######
 
 // XOR_A_A xors A with A and puts result into A.
