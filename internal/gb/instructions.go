@@ -632,6 +632,8 @@ func BIT_7_pHL(mem *Memory, reg *Registers) {
 func JR_NZ_n(mem *Memory, reg *Registers) {
 	if !reg.IsFlagSet(zeroFlag) {
 		relJumpByImmediateValue(mem, reg)
+	} else {
+		reg.PC += 1
 	}
 }
 
@@ -640,6 +642,8 @@ func JR_NZ_n(mem *Memory, reg *Registers) {
 func JR_Z_n(mem *Memory, reg *Registers) {
 	if reg.IsFlagSet(zeroFlag) {
 		relJumpByImmediateValue(mem, reg)
+	} else {
+		reg.PC += 1
 	}
 }
 
@@ -648,6 +652,8 @@ func JR_Z_n(mem *Memory, reg *Registers) {
 func JR_NC_n(mem *Memory, reg *Registers) {
 	if !reg.IsFlagSet(carryFlag) {
 		relJumpByImmediateValue(mem, reg)
+	} else {
+		reg.PC += 1
 	}
 }
 
@@ -656,6 +662,8 @@ func JR_NC_n(mem *Memory, reg *Registers) {
 func JR_C_n(mem *Memory, reg *Registers) {
 	if reg.IsFlagSet(carryFlag) {
 		relJumpByImmediateValue(mem, reg)
+	} else {
+		reg.PC += 1
 	}
 }
 
@@ -700,5 +708,5 @@ func relJump(n int8, reg *Registers) {
 			"invalid relative jump (current PC: 0x%x, jump: %v)",
 			reg.PC, n))
 	}
-	reg.PC += uint16(newpc)
+	reg.PC = uint16(newpc)
 }
