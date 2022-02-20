@@ -7,12 +7,14 @@ import (
 const BootROMSize = 256
 const CartROM0Size = 0x4000
 const vramSize = 0x2000
+const hramSize = 0x7F
 const ioMemSize = 0x80
 
 type Memory struct {
 	bootROM  [BootROMSize]byte
 	cartROM0 [CartROM0Size]byte
 	vram     [vramSize]byte
+	hram     [hramSize]byte
 	ioMem    [ioMemSize]byte
 }
 
@@ -33,6 +35,8 @@ func (m *Memory) Read8(addr uint16) uint8 {
 	} else if addr >= 0xFF00 && addr < 0xFF80 {
 		fmt.Printf("Reading from I/O Memory at 0x%04X.\n", addr)
 		return m.ioMem[addr-0xFF00]
+	} else if addr >= 0xFF80 && addr < 0xFFFF {
+		return m.hram[addr-0xFF80]
 	}
 	panic(fmt.Sprintf("Read from unknown memory address 0x%X", addr))
 }
@@ -50,6 +54,8 @@ func (m *Memory) Write8(addr uint16, val uint8) {
 	} else if addr >= 0xFF00 && addr < 0xFF80 {
 		fmt.Printf("Writing to I/O Memory at 0x%X.\n", addr)
 		m.ioMem[addr-0xFF00] = val
+	} else if addr >= 0xFF80 && addr < 0xFFFF {
+		m.ioMem[addr-0xFF80] = val
 	} else {
 		panic(fmt.Sprintf("Write to non-writable memory address 0x%X", addr))
 	}
