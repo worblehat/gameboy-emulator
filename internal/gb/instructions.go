@@ -770,6 +770,11 @@ func CALL_C_nn(mem *Memory, reg *Registers) {
 
 // ###### Rotates and Shifts ######
 
+// RLA rotates A to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag).
+func RLA(mem *Memory, reg *Registers) {
+	RL_A(mem, reg)
+}
+
 // RL_A rotates A to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag).
 func RL_A(mem *Memory, reg *Registers) {
 	rotateLeftThroughCarry(&reg.A, reg)
@@ -811,6 +816,11 @@ func RL_pHL(mem *Memory, reg *Registers) {
 	value := mem.Read8(addr)
 	rotateLeftThroughCarry(&value, reg)
 	mem.Write8(addr, value)
+}
+
+// RRA rotates A to the right (with Carry flag -> Bit 7, Bit 0 -> Carry flag).
+func RRA(mem *Memory, reg *Registers) {
+	RR_A(mem, reg)
 }
 
 // RR_A rotates A to the right (with Carry flag -> Bit 7, Bit 0 -> Carry flag).
@@ -856,6 +866,11 @@ func RR_pHL(mem *Memory, reg *Registers) {
 	mem.Write8(addr, value)
 }
 
+// RLCA rotates A to the left (with Bit 7 -> Carry flag and Bit 0).
+func RLCA(mem *Memory, reg *Registers) {
+	RLC_A(mem, reg)
+}
+
 // RLC_A rotates A to the left (with Bit 7 -> Carry flag and Bit 0).
 func RLC_A(mem *Memory, reg *Registers) {
 	rotateLeft(&reg.A, reg)
@@ -897,6 +912,11 @@ func RLC_pHL(mem *Memory, reg *Registers) {
 	value := mem.Read8(addr)
 	rotateLeft(&value, reg)
 	mem.Write8(addr, value)
+}
+
+// RRCA rotates A to the right (with Bit 7 -> Carry flag and Bit 0).
+func RRCA(mem *Memory, reg *Registers) {
+	RRC_A(mem, reg)
 }
 
 // RRC_A rotates A to the right (with Bit 7 -> Carry flag and Bit 0).
