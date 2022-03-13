@@ -770,46 +770,175 @@ func CALL_C_nn(mem *Memory, reg *Registers) {
 
 // ###### Rotates and Shifts ######
 
-// RL_A rotates A to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+// RL_A rotates A to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag).
 func RL_A(mem *Memory, reg *Registers) {
 	rotateLeftThroughCarry(&reg.A, reg)
 }
 
-// RL_B rotates B to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+// RL_B rotates B to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag).
 func RL_B(mem *Memory, reg *Registers) {
 	rotateLeftThroughCarry(&reg.B, reg)
 }
 
-// RL_C rotates C to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+// RL_C rotates C to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag).
 func RL_C(mem *Memory, reg *Registers) {
 	rotateLeftThroughCarry(&reg.C, reg)
 }
 
-// RL_D rotates D to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+// RL_D rotates D to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag).
 func RL_D(mem *Memory, reg *Registers) {
 	rotateLeftThroughCarry(&reg.D, reg)
 }
 
-// RL_E rotates E to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+// RL_E rotates E to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag).
 func RL_E(mem *Memory, reg *Registers) {
 	rotateLeftThroughCarry(&reg.E, reg)
 }
 
-// RL_H rotates H to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+// RL_H rotates H to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag.
 func RL_H(mem *Memory, reg *Registers) {
 	rotateLeftThroughCarry(&reg.H, reg)
 }
 
-// RL_L rotates L to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+// RL_L rotates L to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag).
 func RL_L(mem *Memory, reg *Registers) {
 	rotateLeftThroughCarry(&reg.L, reg)
 }
 
-// RL_pHL rotates the value pointed by HL to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+// RL_pHL rotates the value pointed by HL to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag).
 func RL_pHL(mem *Memory, reg *Registers) {
 	addr := reg.HL()
 	value := mem.Read8(addr)
 	rotateLeftThroughCarry(&value, reg)
+	mem.Write8(addr, value)
+}
+
+// RR_A rotates A to the right (with Carry flag -> Bit 7, Bit 0 -> Carry flag).
+func RR_A(mem *Memory, reg *Registers) {
+	rotateRightThroughCarry(&reg.A, reg)
+}
+
+// RR_B rotates B to the right (with Carry flag -> Bit 7, Bit 0 -> Carry flag).
+func RR_B(mem *Memory, reg *Registers) {
+	rotateRightThroughCarry(&reg.B, reg)
+}
+
+// RR_C rotates C to the right (with Carry flag -> Bit 7, Bit 0 -> Carry flag).
+func RR_C(mem *Memory, reg *Registers) {
+	rotateRightThroughCarry(&reg.C, reg)
+}
+
+// RR_D rotates D to the right (with Carry flag -> Bit 7, Bit 0 -> Carry flag).
+func RR_D(mem *Memory, reg *Registers) {
+	rotateRightThroughCarry(&reg.D, reg)
+}
+
+// RR_E rotates E to the right (with Carry flag -> Bit 7, Bit 0 -> Carry flag).
+func RR_E(mem *Memory, reg *Registers) {
+	rotateRightThroughCarry(&reg.E, reg)
+}
+
+// RR_H rotates H to the right (with Carry flag -> Bit 7, Bit 0 -> Carry flag).
+func RR_H(mem *Memory, reg *Registers) {
+	rotateRightThroughCarry(&reg.H, reg)
+}
+
+// RR_L rotates L to the right (with Carry flag -> Bit 7, Bit 0 -> Carry flag).
+func RR_L(mem *Memory, reg *Registers) {
+	rotateRightThroughCarry(&reg.L, reg)
+}
+
+// RR_pHL rotates the value pointed by HL to the right (with Carry flag -> Bit 0, Bit 7 -> Carry flag).
+func RR_pHL(mem *Memory, reg *Registers) {
+	addr := reg.HL()
+	value := mem.Read8(addr)
+	rotateRightThroughCarry(&value, reg)
+	mem.Write8(addr, value)
+}
+
+// RLC_A rotates A to the left (with Bit 7 -> Carry flag and Bit 0).
+func RLC_A(mem *Memory, reg *Registers) {
+	rotateLeft(&reg.A, reg)
+}
+
+// RLC_B rotates B to the left (with Bit 7 -> Carry flag and Bit 0).
+func RLC_B(mem *Memory, reg *Registers) {
+	rotateLeft(&reg.B, reg)
+}
+
+// RLC_C rotates C to the left (with Bit 7 -> Carry flag and Bit 0).
+func RLC_C(mem *Memory, reg *Registers) {
+	rotateLeft(&reg.C, reg)
+}
+
+// RLC_D rotates D to the left (with Bit 7 -> Carry flag and Bit 0).
+func RLC_D(mem *Memory, reg *Registers) {
+	rotateLeft(&reg.D, reg)
+}
+
+// RLC_E rotates E to the left (with Bit 7 -> Carry flag and Bit 0).
+func RLC_E(mem *Memory, reg *Registers) {
+	rotateLeft(&reg.E, reg)
+}
+
+// RLC_H rotates H to the left (with Bit 7 -> Carry flag and Bit 0).
+func RLC_H(mem *Memory, reg *Registers) {
+	rotateLeft(&reg.H, reg)
+}
+
+// RLC_L rotates L to the left (with Bit 7 -> Carry flag and Bit 0).
+func RLC_L(mem *Memory, reg *Registers) {
+	rotateLeft(&reg.L, reg)
+}
+
+// RLC_pHL rotates the value pointed by HL to the left  (with Bit 7 -> Carry flag and Bit 0).
+func RLC_pHL(mem *Memory, reg *Registers) {
+	addr := reg.HL()
+	value := mem.Read8(addr)
+	rotateLeft(&value, reg)
+	mem.Write8(addr, value)
+}
+
+// RRC_A rotates A to the right (with Bit 7 -> Carry flag and Bit 0).
+func RRC_A(mem *Memory, reg *Registers) {
+	rotateRight(&reg.A, reg)
+}
+
+// RRC_B rotates B to the right (with Bit 7 -> Carry flag and Bit 0).
+func RRC_B(mem *Memory, reg *Registers) {
+	rotateRight(&reg.B, reg)
+}
+
+// RRC_C rotates C to the right (with Bit 7 -> Carry flag and Bit 0).
+func RRC_C(mem *Memory, reg *Registers) {
+	rotateRight(&reg.C, reg)
+}
+
+// RRC_D rotates D to the right (with Bit 7 -> Carry flag and Bit 0).
+func RRC_D(mem *Memory, reg *Registers) {
+	rotateRight(&reg.D, reg)
+}
+
+// RRC_E rotates E to the right (with Bit 7 -> Carry flag and Bit 0).
+func RRC_E(mem *Memory, reg *Registers) {
+	rotateRight(&reg.E, reg)
+}
+
+// RRC_H rotates H to the right (with Bit 7 -> Carry flag and Bit 0).
+func RRC_H(mem *Memory, reg *Registers) {
+	rotateRight(&reg.H, reg)
+}
+
+// RRC_L rotates L to the right (with Bit 7 -> Carry flag and Bit 0).
+func RRC_L(mem *Memory, reg *Registers) {
+	rotateRight(&reg.L, reg)
+}
+
+// RRC_pHL rotates the value pointed by HL to the right  (with Bit 7 -> Carry flag and Bit 0).
+func RRC_pHL(mem *Memory, reg *Registers) {
+	addr := reg.HL()
+	value := mem.Read8(addr)
+	rotateRight(&value, reg)
 	mem.Write8(addr, value)
 }
 
@@ -871,6 +1000,40 @@ func pushOntoStack(value uint16, mem *Memory, reg *Registers) {
 	mem.Write16(reg.SP, value)
 }
 
+// rotateLeft rotates the given register or memory value to the left by one bit.
+// Copies bit 7 to bit 0 and to the the carry flag.
+func rotateLeft(value *uint8, reg *Registers) {
+	carry := (*value & 0b10000000) != 0
+
+	*value = *value << 1
+	if carry {
+		*value = *value | 0b00000001
+	} else {
+		*value &= ^uint8(0b00000001)
+	}
+
+	reg.SetFlags(carryFlag, carry)
+	reg.SetFlags(subtractFlag|halfCarryFlag, false)
+	reg.SetFlags(zeroFlag, *value == 0)
+}
+
+// rotateRight rotates the given register or memory value to the right by one bit.
+// Copies bit 0 to bit 7 and to the the carry flag.
+func rotateRight(value *uint8, reg *Registers) {
+	carry := (*value & 0b00000001) != 0
+
+	*value = *value >> 1
+	if carry {
+		*value = *value | 0b10000000
+	} else {
+		*value &= ^uint8(0b10000000)
+	}
+
+	reg.SetFlags(carryFlag, carry)
+	reg.SetFlags(subtractFlag|halfCarryFlag, false)
+	reg.SetFlags(zeroFlag, *value == 0)
+}
+
 // rotateLeftThroughCarry rotates the given register or memory value to the left by one bit.
 // Copies the carry flag to bit 0 and bit 7 to the carry flag.
 func rotateLeftThroughCarry(value *uint8, reg *Registers) {
@@ -887,5 +1050,22 @@ func rotateLeftThroughCarry(value *uint8, reg *Registers) {
 	reg.SetFlags(carryFlag, newCarry)
 	reg.SetFlags(subtractFlag|halfCarryFlag, false)
 	reg.SetFlags(zeroFlag, *value == 0)
+}
 
+// rotateRightThroughCarry rotates the given register or memory value to the right by one bit.
+// Copies the carry flag to bit 7 and bit 0 to the carry flag.
+func rotateRightThroughCarry(value *uint8, reg *Registers) {
+	oldCarry := reg.IsFlagSet(carryFlag)
+	newCarry := (*value & 0b00000001) != 0
+
+	*value = *value >> 1
+	if oldCarry {
+		*value = *value | 0b10000000
+	} else {
+		*value &= ^uint8(0b10000000)
+	}
+
+	reg.SetFlags(carryFlag, newCarry)
+	reg.SetFlags(subtractFlag|halfCarryFlag, false)
+	reg.SetFlags(zeroFlag, *value == 0)
 }
