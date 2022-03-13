@@ -258,6 +258,30 @@ func PUSH_HL(mem *Memory, reg *Registers) {
 	pushOntoStack(value, mem, reg)
 }
 
+// POP_AF pops two bytes off stack into AF.
+func POP_AF(mem *Memory, reg *Registers) {
+	value := popOffStack(mem, reg)
+	reg.SetAF(value)
+}
+
+// POP_BC pops two bytes off stack into BC.
+func POP_BC(mem *Memory, reg *Registers) {
+	value := popOffStack(mem, reg)
+	reg.SetBC(value)
+}
+
+// POP_DE pops two bytes off stack into DE.
+func POP_DE(mem *Memory, reg *Registers) {
+	value := popOffStack(mem, reg)
+	reg.SetDE(value)
+}
+
+// POP_HL pops two bytes off stack into HL.
+func POP_HL(mem *Memory, reg *Registers) {
+	value := popOffStack(mem, reg)
+	reg.SetHL(value)
+}
+
 // ###### Logical Operations ######
 
 // XOR_A_A xors A with A and puts result into A.
@@ -1018,6 +1042,13 @@ func callImmediateValue(mem *Memory, reg *Registers) {
 func pushOntoStack(value uint16, mem *Memory, reg *Registers) {
 	reg.SP -= 2
 	mem.Write16(reg.SP, value)
+}
+
+// popOffStack pops a 16-bit value off the stack.
+func popOffStack(mem *Memory, reg *Registers) uint16 {
+	value := mem.Read16(reg.SP)
+	reg.SP += 2
+	return value
 }
 
 // rotateLeft rotates the given register or memory value to the left by one bit.

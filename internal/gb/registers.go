@@ -41,6 +41,21 @@ func (r *Registers) HL() uint16 {
 	return (uint16(r.H) << 8) | uint16(r.L)
 }
 
+func (r *Registers) SetAF(value uint16) {
+	r.A = uint8(value >> 8)
+	r.F = uint8(value)
+}
+
+func (r *Registers) SetBC(value uint16) {
+	r.B = uint8(value >> 8)
+	r.C = uint8(value)
+}
+
+func (r *Registers) SetDE(value uint16) {
+	r.D = uint8(value >> 8)
+	r.E = uint8(value)
+}
+
 func (r *Registers) SetHL(value uint16) {
 	r.H = uint8(value >> 8)
 	r.L = uint8(value)
