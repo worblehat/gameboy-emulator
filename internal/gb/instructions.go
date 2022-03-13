@@ -177,8 +177,7 @@ func LDD_pHL_A(mem *Memory, reg *Registers) {
 	addr := reg.HL()
 	mem.Write8(addr, reg.A)
 	addr -= 1
-	reg.H = uint8(addr >> 8)
-	reg.L = uint8(addr)
+	reg.SetHL(addr)
 }
 
 // LD_IO_C_A loads the value of A to address 0xFF00 + C (I/O memory).
@@ -225,8 +224,7 @@ func LD_DE_nn(mem *Memory, reg *Registers) {
 
 // LD_HL_nn loads a 16 bit immediate value into HL.
 func LD_HL_nn(mem *Memory, reg *Registers) {
-	reg.L = mem.Read8(reg.PC)
-	reg.H = mem.Read8(reg.PC + 1)
+	reg.SetHL(mem.Read16(reg.PC))
 	reg.PC += 2
 }
 

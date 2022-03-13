@@ -41,6 +41,11 @@ func (r *Registers) HL() uint16 {
 	return (uint16(r.H) << 8) | uint16(r.L)
 }
 
+func (r *Registers) SetHL(value uint16) {
+	r.H = uint8(value >> 8)
+	r.L = uint8(value)
+}
+
 func (r *Registers) Reset() {
 	r.A = 0
 	r.B = 0
