@@ -377,6 +377,49 @@ func INC_pHL(mem *Memory, reg *Registers) {
 	mem.Write8(addr, value)
 }
 
+// DEC_A decrements register A.
+func DEC_A(mem *Memory, reg *Registers) {
+	decrement(&reg.A, reg)
+}
+
+// DEC_B decrements register B.
+func DEC_B(mem *Memory, reg *Registers) {
+	decrement(&reg.B, reg)
+}
+
+// DEC_C decrements register C.
+func DEC_C(mem *Memory, reg *Registers) {
+	decrement(&reg.C, reg)
+}
+
+// DEC_D decrements register D.
+func DEC_D(mem *Memory, reg *Registers) {
+	decrement(&reg.D, reg)
+}
+
+// DEC_E decrements register E.
+func DEC_E(mem *Memory, reg *Registers) {
+	decrement(&reg.E, reg)
+}
+
+// DEC_H decrements register H.
+func DEC_H(mem *Memory, reg *Registers) {
+	decrement(&reg.H, reg)
+}
+
+// DEC_L decrements register L.
+func DEC_L(mem *Memory, reg *Registers) {
+	decrement(&reg.L, reg)
+}
+
+// DEC_pHL decrements the value pointed to by HL.
+func DEC_pHL(mem *Memory, reg *Registers) {
+	addr := reg.HL()
+	value := mem.Read8(addr)
+	decrement(&value, reg)
+	mem.Write8(addr, value)
+}
+
 // ###### Single-Bit Operations ######
 
 // BIT_0_A tests bit 0 in register A.
@@ -1008,6 +1051,14 @@ func increment(value *uint8, reg *Registers) {
 	*value += 1
 	reg.SetFlags(halfCarryFlag, (*value&0x0F) == 0)
 	reg.SetFlags(subtractFlag, false)
+	reg.SetFlags(zeroFlag, *value == 0)
+}
+
+// decrement decrements the given register or memory value.
+func decrement(value *uint8, reg *Registers) {
+	reg.SetFlags(halfCarryFlag, (*value&0x0F) == 0)
+	*value -= 1
+	reg.SetFlags(subtractFlag, true)
 	reg.SetFlags(zeroFlag, *value == 0)
 }
 
