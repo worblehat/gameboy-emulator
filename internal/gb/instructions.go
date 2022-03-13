@@ -88,19 +88,19 @@ func LD_A_L(mem *Memory, reg *Registers) {
 
 // LD_A_pBC loads the value pointed by BC into A.
 func LD_A_pBC(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.B) << 8) | uint16(reg.C)
+	addr := reg.BC()
 	reg.A = mem.Read8(addr)
 }
 
 // LD_A_pDE loads the value pointed by DE into A.
 func LD_A_pDE(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.D) << 8) | uint16(reg.E)
+	addr := reg.DE()
 	reg.A = mem.Read8(addr)
 }
 
 // LD_A_pHL loads the value pointed by HL into A.
 func LD_A_pHL(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	addr := reg.HL()
 	reg.A = mem.Read8(addr)
 }
 
@@ -149,19 +149,19 @@ func LD_L_A(mem *Memory, reg *Registers) {
 
 // LD_pBC_ loads the value of A into the address pointed by BC.
 func LD_pBC_A(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.B) << 8) | uint16(reg.C)
+	addr := reg.BC()
 	mem.Write8(addr, reg.A)
 }
 
 // LD_pDE_ loads the value of A into the address pointed by DE.
 func LD_pDE_A(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.D) << 8) | uint16(reg.E)
+	addr := reg.DE()
 	mem.Write8(addr, reg.A)
 }
 
 // LD_pHL_ loads the value of A into the address pointed by HL.
 func LD_pHL_A(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	addr := reg.HL()
 	mem.Write8(addr, reg.A)
 }
 
@@ -238,25 +238,25 @@ func LD_SP_nn(mem *Memory, reg *Registers) {
 
 // PUSH_AF pushes AF onto the stack.
 func PUSH_AF(mem *Memory, reg *Registers) {
-	value := (uint16(reg.A) << 8) | uint16(reg.F)
+	value := reg.AF()
 	pushOntoStack(value, mem, reg)
 }
 
 // PUSH_BC pushes BC onto the stack.
 func PUSH_BC(mem *Memory, reg *Registers) {
-	value := (uint16(reg.B) << 8) | uint16(reg.C)
+	value := reg.BC()
 	pushOntoStack(value, mem, reg)
 }
 
 // PUSH_DE pushes DE onto the stack.
 func PUSH_DE(mem *Memory, reg *Registers) {
-	value := (uint16(reg.D) << 8) | uint16(reg.E)
+	value := reg.DE()
 	pushOntoStack(value, mem, reg)
 }
 
 // PUSH_HL pushes HL onto the stack.
 func PUSH_HL(mem *Memory, reg *Registers) {
-	value := (uint16(reg.H) << 8) | uint16(reg.L)
+	value := reg.HL()
 	pushOntoStack(value, mem, reg)
 }
 
@@ -299,7 +299,7 @@ func XOR_A_L(mem *Memory, reg *Registers) {
 
 // XOR_A_pHL xors A with the value pointed by HL and puts result into A.
 func XOR_A_pHL(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	addr := reg.HL()
 	xorA(mem.Read8(addr), reg)
 }
 
@@ -349,7 +349,7 @@ func INC_L(mem *Memory, reg *Registers) {
 
 // INC_pHL increments the value pointed to by HL.
 func INC_pHL(mem *Memory, reg *Registers) {
-	addr := (uint16(reg.H) << 8) | uint16(reg.L)
+	addr := reg.HL()
 	value := mem.Read8(addr)
 	increment(&value, reg)
 	mem.Write8(addr, value)
