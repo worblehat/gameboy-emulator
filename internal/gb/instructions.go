@@ -768,6 +768,51 @@ func CALL_C_nn(mem *Memory, reg *Registers) {
 	}
 }
 
+// ###### Rotates and Shifts ######
+
+// RL_A rotates A to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+func RL_A(mem *Memory, reg *Registers) {
+	rotateLeftThroughCarry(&reg.A, reg)
+}
+
+// RL_B rotates B to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+func RL_B(mem *Memory, reg *Registers) {
+	rotateLeftThroughCarry(&reg.B, reg)
+}
+
+// RL_C rotates C to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+func RL_C(mem *Memory, reg *Registers) {
+	rotateLeftThroughCarry(&reg.C, reg)
+}
+
+// RL_D rotates D to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+func RL_D(mem *Memory, reg *Registers) {
+	rotateLeftThroughCarry(&reg.D, reg)
+}
+
+// RL_E rotates E to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+func RL_E(mem *Memory, reg *Registers) {
+	rotateLeftThroughCarry(&reg.E, reg)
+}
+
+// RL_H rotates H to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+func RL_H(mem *Memory, reg *Registers) {
+	rotateLeftThroughCarry(&reg.H, reg)
+}
+
+// RL_L rotates L to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+func RL_L(mem *Memory, reg *Registers) {
+	rotateLeftThroughCarry(&reg.L, reg)
+}
+
+// RL_pHL rotates the value pointed by HL to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag )
+func RL_pHL(mem *Memory, reg *Registers) {
+	addr := reg.HL()
+	value := mem.Read8(addr)
+	rotateLeftThroughCarry(&value, reg)
+	mem.Write8(addr, value)
+}
+
 // ###### Common functions used by the instructions ######
 
 // xorA xors register A with the given reigster or memory value and puts the result into A.
@@ -824,4 +869,23 @@ func callImmediateValue(mem *Memory, reg *Registers) {
 func pushOntoStack(value uint16, mem *Memory, reg *Registers) {
 	reg.SP -= 2
 	mem.Write16(reg.SP, value)
+}
+
+// rotateLeftThroughCarry rotates the given register or memory value to the left by one bit.
+// Copies the carry flag to bit 0 and bit 7 to the carry flag.
+func rotateLeftThroughCarry(value *uint8, reg *Registers) {
+	oldCarry := reg.IsFlagSet(carryFlag)
+	newCarry := (*value & 0b10000000) != 0
+
+	*value = *value << 1
+	if oldCarry {
+		*value = *value | 0b00000001
+	} else {
+		*value &= ^uint8(0b00000001)
+	}
+
+	reg.SetFlags(carryFlag, newCarry)
+	reg.SetFlags(subtractFlag|halfCarryFlag, false)
+	reg.SetFlags(zeroFlag, *value == 0)
+
 }
