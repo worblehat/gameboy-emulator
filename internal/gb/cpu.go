@@ -17,7 +17,11 @@ func NewCPU(mem *Memory) *CPU {
 func (c *CPU) Run() {
 	c.reset()
 
+	dbg := NewDebugger(c.mem, &c.reg)
+
 	for {
+		dbg.Cycle()
+
 		opCode := uint16(c.mem.Read8(c.reg.PC))
 		instrAddr := c.reg.PC
 		c.reg.PC += 1
