@@ -55,7 +55,7 @@ func (m *Memory) Write8(addr uint16, val uint8) {
 		fmt.Printf("Writing to I/O Memory at 0x%X.\n", addr)
 		m.ioMem[addr-0xFF00] = val
 	} else if addr >= 0xFF80 && addr < 0xFFFF {
-		m.ioMem[addr-0xFF80] = val
+		m.hram[addr-0xFF80] = val
 	} else {
 		panic(fmt.Sprintf("Write to non-writable memory address 0x%X", addr))
 	}
