@@ -172,10 +172,34 @@ func LD_pnn_A(mem *Memory, reg *Registers) {
 	mem.Write8(addr, reg.A)
 }
 
+// LDI_pHL_A loads the value of A to address HL and increments HL.
+func LDI_pHL_A(mem *Memory, reg *Registers) {
+	addr := reg.HL()
+	mem.Write8(addr, reg.A)
+	addr += 1
+	reg.SetHL(addr)
+}
+
+// LDI_A_pHL loads the value pointed by HL into A and increments HL.
+func LDI_A_pHL(mem *Memory, reg *Registers) {
+	addr := reg.HL()
+	reg.A = mem.Read8(addr)
+	addr += 1
+	reg.SetHL(addr)
+}
+
 // LDD_pHL_A loads the value of A to address HL and decrements HL.
 func LDD_pHL_A(mem *Memory, reg *Registers) {
 	addr := reg.HL()
 	mem.Write8(addr, reg.A)
+	addr -= 1
+	reg.SetHL(addr)
+}
+
+// LDD_A_pHL loads the value pointed by HL into A and decrements HL.
+func LDD_A_pHL(mem *Memory, reg *Registers) {
+	addr := reg.HL()
+	reg.A = mem.Read8(addr)
 	addr -= 1
 	reg.SetHL(addr)
 }
