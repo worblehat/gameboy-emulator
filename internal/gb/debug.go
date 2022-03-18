@@ -11,6 +11,7 @@ import (
 )
 
 type Debugger struct {
+	Enabled    bool
 	mem        *Memory
 	reg        *Registers
 	breaks     map[uint]Breakpoint
@@ -35,6 +36,9 @@ type Breakpoint struct {
 }
 
 func (d *Debugger) Cycle() {
+	if !d.Enabled {
+		return
+	}
 	if shouldBreak, bp := d.shouldBreakAt(d.reg.PC); shouldBreak {
 		fmt.Printf("Breakpoint %v at 0x%04X\n", bp.id, d.reg.PC)
 		d.processInput()

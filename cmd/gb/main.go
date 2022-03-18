@@ -12,6 +12,7 @@ import (
 func main() {
 	bootROMPath := flag.String("boot-rom", "", "Path to a file with the boot ROM.")
 	cartROMPath := flag.String("cartridge-rom", "", "Path to a file with a cartridge ROM.")
+	withDebugger := flag.Bool("debug", false, "Enable debuger.")
 	flag.Parse()
 
 	if *bootROMPath == "" {
@@ -40,7 +41,7 @@ func main() {
 	memory := gb.NewMemory(bootROM, cartROM0)
 
 	cpu := gb.NewCPU(memory)
-	cpu.Run()
+	cpu.Run(*withDebugger)
 }
 
 func loadBootROM(romPath string) ([gb.BootROMSize]byte, error) {

@@ -14,10 +14,11 @@ func NewCPU(mem *Memory) *CPU {
 	}
 }
 
-func (c *CPU) Run() {
+func (c *CPU) Run(withDebugger bool) {
 	c.reset()
 
 	dbg := NewDebugger(c.mem, &c.reg)
+	dbg.Enabled = withDebugger
 
 	for {
 		dbg.Cycle()
