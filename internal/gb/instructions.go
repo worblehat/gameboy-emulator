@@ -874,11 +874,68 @@ func BIT_7_pHL(mem *Memory, reg *Registers) {
 	testBit(mem.Read8(addr), 7, reg)
 }
 
+// ###### Absolute Jumps ######
+
+// JP_nn jumps to the address pointed by a 16-bit immediate value.
+func JP_nn(mem *Memory, reg *Registers) {
+	jumpToImmediateValue(mem, reg)
+}
+
+// JP_NZ_nn jumps to the address pointed by a 16-bit immediate value
+// if the zero flag is not set.
+func JP_NZ_nn(mem *Memory, reg *Registers) {
+	if !reg.IsFlagSet(zeroFlag) {
+		jumpToImmediateValue(mem, reg)
+	} else {
+		reg.PC += 2
+	}
+}
+
+// JP_Z_nn jumps to the address pointed by a 16-bit immediate value
+// if the zero flag is set.
+func JP_Z_nn(mem *Memory, reg *Registers) {
+	if reg.IsFlagSet(zeroFlag) {
+		jumpToImmediateValue(mem, reg)
+	} else {
+		reg.PC += 2
+	}
+}
+
+// JP_NC_nn jumps to the address pointed by a 16-bit immediate value
+// if the carry flag is not set.
+func JP_NC_nn(mem *Memory, reg *Registers) {
+	if !reg.IsFlagSet(carryFlag) {
+		jumpToImmediateValue(mem, reg)
+	} else {
+		reg.PC += 2
+	}
+}
+
+// JP_pHL jumps to the address pointed by a HL.
+func JP_pHL(mem *Memory, reg *Registers) {
+	reg.PC = reg.HL()
+}
+
+// JP_C_nn jumps to the address pointed by a 16-bit immediate value
+// if the carry flag is set.
+func JP_C_nn(mem *Memory, reg *Registers) {
+	if reg.IsFlagSet(carryFlag) {
+		jumpToImmediateValue(mem, reg)
+	} else {
+		reg.PC += 2
+	}
+}
+
 // ###### Relative Jumps ######
 
-// If the zero flag is not set JR_NZ_n adds an 8 bit signed immediate
+// JP_n adds an 8 bit signed immediate value to current PC and jumps to it.
+func JP_n(mem *Memory, reg *Registers) {
+	relJumpByImmediateValue(mem, reg)
+}
+
+// If the zero flag is not set JP_NZ_n adds an 8 bit signed immediate
 // value to current PC and jumps to it.
-func JR_NZ_n(mem *Memory, reg *Registers) {
+func JP_NZ_n(mem *Memory, reg *Registers) {
 	if !reg.IsFlagSet(zeroFlag) {
 		relJumpByImmediateValue(mem, reg)
 	} else {
@@ -886,9 +943,9 @@ func JR_NZ_n(mem *Memory, reg *Registers) {
 	}
 }
 
-// If the zero flag is set JR_Z_n adds an 8 bit signed immediate
+// If the zero flag is set JP_Z_n adds an 8 bit signed immediate
 // value to current PC and jumps to it.
-func JR_Z_n(mem *Memory, reg *Registers) {
+func JP_Z_n(mem *Memory, reg *Registers) {
 	if reg.IsFlagSet(zeroFlag) {
 		relJumpByImmediateValue(mem, reg)
 	} else {
@@ -896,9 +953,9 @@ func JR_Z_n(mem *Memory, reg *Registers) {
 	}
 }
 
-// If the carry flag is not set JR_NC_n adds an 8 bit signed immediate
+// If the carry flag is not set JP_NC_n adds an 8 bit signed immediate
 // value to current PC and jumps to it.
-func JR_NC_n(mem *Memory, reg *Registers) {
+func JP_NC_n(mem *Memory, reg *Registers) {
 	if !reg.IsFlagSet(carryFlag) {
 		relJumpByImmediateValue(mem, reg)
 	} else {
@@ -906,9 +963,9 @@ func JR_NC_n(mem *Memory, reg *Registers) {
 	}
 }
 
-// If the carry flag is set JR_C_n adds an 8 bit signed immediate
+// If the carry flag is set JP_C_n adds an 8 bit signed immediate
 // value to current PC and jumps to it.
-func JR_C_n(mem *Memory, reg *Registers) {
+func JP_C_n(mem *Memory, reg *Registers) {
 	if reg.IsFlagSet(carryFlag) {
 		relJumpByImmediateValue(mem, reg)
 	} else {
@@ -1221,8 +1278,14 @@ func decrement(value *uint8, reg *Registers) {
 	reg.SetFlags(zeroFlag, *value == 0)
 }
 
-// relJump performs a relative jump by adding an 8 bit signed immediate value
-// to the current PC.
+// jumpToImmediateValue performs an absolute jump to the address pointed
+// by an 16 bit immediate value.
+func jumpToImmediateValue(mem *Memory, reg *Registers) {
+	reg.PC = mem.Read16(reg.PC)
+}
+
+// relJumpByImmediateValue performs a relative jump by adding an 8 bit signed
+// immediate value to the current PC.
 func relJumpByImmediateValue(mem *Memory, reg *Registers) {
 	n := int8(mem.Read8(reg.PC))
 	reg.PC += 1
