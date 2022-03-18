@@ -234,15 +234,13 @@ func LD_A_IO_n(mem *Memory, reg *Registers) {
 
 // LD_BC_nn loads a 16 bit immediate value into BC.
 func LD_BC_nn(mem *Memory, reg *Registers) {
-	reg.C = mem.Read8(reg.PC)
-	reg.B = mem.Read8(reg.PC + 1)
+	reg.SetBC(mem.Read16(reg.PC))
 	reg.PC += 2
 }
 
 // LD_DE_nn loads a 16 bit immediate value into DE.
 func LD_DE_nn(mem *Memory, reg *Registers) {
-	reg.E = mem.Read8(reg.PC)
-	reg.D = mem.Read8(reg.PC + 1)
+	reg.SetDE(mem.Read16(reg.PC))
 	reg.PC += 2
 }
 
@@ -442,6 +440,60 @@ func DEC_pHL(mem *Memory, reg *Registers) {
 	value := mem.Read8(addr)
 	decrement(&value, reg)
 	mem.Write8(addr, value)
+}
+
+// ###### 16-Bit Arithmetic Operations ######
+
+// INC_BC increments register BC.
+func INC_BC(mem *Memory, reg *Registers) {
+	value := reg.BC()
+	value += 1
+	reg.SetBC(value)
+}
+
+// INC_DE increments register DE.
+func INC_DE(mem *Memory, reg *Registers) {
+	value := reg.DE()
+	value += 1
+	reg.SetDE(value)
+}
+
+// INC_HL increments register HL.
+func INC_HL(mem *Memory, reg *Registers) {
+	value := reg.HL()
+	value += 1
+	reg.SetHL(value)
+}
+
+// INC_SP increments register SP.
+func INC_SP(mem *Memory, reg *Registers) {
+	reg.SP += 1
+}
+
+// DEC_BC decrements register BC.
+func DEC_BC(mem *Memory, reg *Registers) {
+	value := reg.BC()
+	value -= 1
+	reg.SetBC(value)
+}
+
+// DEC_DE decrements register DE.
+func DEC_DE(mem *Memory, reg *Registers) {
+	value := reg.DE()
+	value -= 1
+	reg.SetDE(value)
+}
+
+// DEC_HL decrements register HL.
+func DEC_HL(mem *Memory, reg *Registers) {
+	value := reg.HL()
+	value -= 1
+	reg.SetHL(value)
+}
+
+// DEC_SP decrements register SP.
+func DEC_SP(mem *Memory, reg *Registers) {
+	reg.SP -= 1
 }
 
 // ###### Single-Bit Operations ######
