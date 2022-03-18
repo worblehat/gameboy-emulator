@@ -442,6 +442,54 @@ func DEC_pHL(mem *Memory, reg *Registers) {
 	mem.Write8(addr, value)
 }
 
+// CP_A compares A with A.
+func CP_A(mem *Memory, reg *Registers) {
+	subtract(reg.A, reg.A, reg)
+}
+
+// CP_B compares A with B.
+func CP_B(mem *Memory, reg *Registers) {
+	subtract(reg.A, reg.B, reg)
+}
+
+// CP_C compares A with C.
+func CP_C(mem *Memory, reg *Registers) {
+	subtract(reg.A, reg.C, reg)
+}
+
+// CP_D compares A with D.
+func CP_D(mem *Memory, reg *Registers) {
+	subtract(reg.A, reg.D, reg)
+}
+
+// CP_E compares A with E.
+func CP_E(mem *Memory, reg *Registers) {
+	subtract(reg.A, reg.E, reg)
+}
+
+// CP_H compares A with H.
+func CP_H(mem *Memory, reg *Registers) {
+	subtract(reg.A, reg.H, reg)
+}
+
+// CP_L compares A with L.
+func CP_L(mem *Memory, reg *Registers) {
+	subtract(reg.A, reg.L, reg)
+}
+
+// CP_pHL compares A with the value pointed by HL.
+func CP_pHL(mem *Memory, reg *Registers) {
+	value := mem.Read8(reg.HL())
+	subtract(reg.A, value, reg)
+}
+
+// CP_n compares A with an 8-bit immediate value.
+func CP_n(mem *Memory, reg *Registers) {
+	value := mem.Read8(reg.PC)
+	subtract(reg.A, value, reg)
+	reg.PC += 1
+}
+
 // ###### 16-Bit Arithmetic Operations ######
 
 // INC_BC increments register BC.
@@ -1286,4 +1334,13 @@ func rotateRightThroughCarry(value *uint8, reg *Registers) {
 	reg.SetFlags(carryFlag, newCarry)
 	reg.SetFlags(subtractFlag|halfCarryFlag, false)
 	reg.SetFlags(zeroFlag, *value == 0)
+}
+
+// subtract subtracts subtrahend from minuend and returns the result.
+func subtract(minuend uint8, subtrahend uint8, reg *Registers) uint8 {
+	reg.SetFlags(subtractFlag, true)
+	reg.SetFlags(zeroFlag, subtrahend == minuend)
+	reg.SetFlags(carryFlag, subtrahend > minuend)
+	reg.SetFlags(halfCarryFlag, (subtrahend&0x0f) > (minuend&0x0f))
+	return minuend - subtrahend
 }
