@@ -859,6 +859,41 @@ func CALL_C_nn(mem *Memory, reg *Registers) {
 	}
 }
 
+// ###### Returns ######
+
+// RET returns to the address on top of the stack.
+func RET(mem *Memory, reg *Registers) {
+	returnFromStack(mem, reg)
+}
+
+// RET_NZ returns to the address on top of the stack if zero flag is not set.
+func RET_NZ(mem *Memory, reg *Registers) {
+	if !reg.IsFlagSet(zeroFlag) {
+		returnFromStack(mem, reg)
+	}
+}
+
+// RET_Z returns to the address on top of the stack if zero flag is set.
+func RET_Z(mem *Memory, reg *Registers) {
+	if reg.IsFlagSet(zeroFlag) {
+		returnFromStack(mem, reg)
+	}
+}
+
+// RET_NC returns to the address on top of the stack if carry flag is not set.
+func RET_NC(mem *Memory, reg *Registers) {
+	if !reg.IsFlagSet(carryFlag) {
+		returnFromStack(mem, reg)
+	}
+}
+
+// RET_C returns to the address on top of the stack if carry flag is set.
+func RET_C(mem *Memory, reg *Registers) {
+	if reg.IsFlagSet(carryFlag) {
+		returnFromStack(mem, reg)
+	}
+}
+
 // ###### Rotates and Shifts ######
 
 // RLA rotates A to the left (with Carry flag -> Bit 0, Bit 7 -> Carry flag).
@@ -1111,6 +1146,11 @@ func relJump(n int8, reg *Registers) {
 func callImmediateValue(mem *Memory, reg *Registers) {
 	pushOntoStack(reg.PC+2, mem, reg)
 	reg.PC = mem.Read16(reg.PC)
+}
+
+// returnFromStack pops a 16-bit address of the stack and jumps to it.
+func returnFromStack(mem *Memory, reg *Registers) {
+	reg.PC = popOffStack(mem, reg)
 }
 
 // pushOntoStack pushes a 16-bit value onto the stack.
