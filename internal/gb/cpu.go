@@ -14,7 +14,7 @@ func NewCPU(mem *Memory) *CPU {
 	}
 }
 
-func (c *CPU) Run(withDebugger bool) {
+func (c *CPU) Run(withDebugger bool, withTrace bool) {
 	c.reset()
 
 	dbg := NewDebugger(c.mem, &c.reg)
@@ -40,8 +40,10 @@ func (c *CPU) Run(withDebugger bool) {
 		}
 
 		instr.Exec(c.mem, &c.reg)
-		fmt.Printf("Executed 0x%04X [%v] at 0x%04X. Next instruction at 0x%04X\n",
-			opCode, instr.Name, instrAddr, c.reg.PC)
+		if withTrace {
+			fmt.Printf("Executed 0x%04X [%v] at 0x%04X. Next instruction at 0x%04X\n",
+				opCode, instr.Name, instrAddr, c.reg.PC)
+		}
 	}
 }
 
